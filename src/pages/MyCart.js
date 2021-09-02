@@ -28,8 +28,7 @@ export default function MyCart ()  {
     }
     
     const checkout = async () => {
-        await fetchUserCart()
-        .then()
+        fetchUserCart()
         fetch(`${process.env.REACT_APP_API_URL}/users/checkout`, {
             method: "POST",
             headers: {
