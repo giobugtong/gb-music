@@ -17,15 +17,22 @@ html {
   background-color: hsl(0, 0%, 9%) !important;
   color: #f4f4ef !important;
   border: none !important;
+  border: 1px solid hsl(0, 0%, 0%) !important;
 }
 
-.themeColor:hover {
+/* .themeColor:hover {
   background-color: hsl(270, 62%, 30%) !important;
+} */
+
+.themeColor:hover {
+  background-color: hsl(0, 0%, 100%) !important;
+  color: #000000 !important;
+  border: 1px solid hsl(0, 0%, 0%) !important;
+
 }
 
 .bgColor {
   background-color:hsl(60, 2%, 95%) !important;
-  border: solid 1px rgb();
 }
 
 .quantity {

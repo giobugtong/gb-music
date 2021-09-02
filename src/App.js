@@ -42,8 +42,8 @@ export default function App() {
     });
   }
 
-  const fetchUserCart = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
+  const fetchUserCart = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
     .then(res => res.json())
     .then(data => {
         console.log(data)
