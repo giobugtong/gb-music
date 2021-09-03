@@ -60,22 +60,19 @@ export default function Login () {
 
                 const Toast = Swal.mixin({
                     toast: true,
-                    position: 'top-end',
+                    position: 'top',
                     showConfirmButton: false,
                     showCloseButton: true,
                     timer: 2000,
                     timerProgressBar: true,
-                    didOpen: (toast) => {
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
+                    showCloseButton: true
                   })
                   
                   Toast.fire({
                     icon: 'success',
                     title: 'You are now logged in'
                   })
-                  
+                
                 
                 setErrorStyle("");
 

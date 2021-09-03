@@ -90,7 +90,7 @@ export default function SpecificProduct () {
                 <h4 className="p-3 p-md-4 text-dark text-center">{brandName} {modelName}</h4>
                 <Card.Body>
                     <Card.Text>{description}</Card.Text>
-                    <h6>Price: P{price.toLocaleString()}.00</h6>
+                    <h6>Price: &#8369;{price.toLocaleString()}.00</h6>
                     {
                     (user.accessToken) ? 
                     <InputGroup className="quantity mx-auto mx-md-0 mt-4">

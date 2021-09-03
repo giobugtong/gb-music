@@ -1,6 +1,5 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { Card, Image } from "react-bootstrap";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../images/default-product-photo.jpeg"
 
@@ -20,7 +19,7 @@ export default function Product ({productProp}) {
                         </Link>
                     </Card.Title>
                     <Link to={`/products/${_id}`}>
-                    <Image src={defaultPhoto}width="400" rounded className="mt-2 mb-3 mb-md-4 mx-auto d-block" fluid />
+                        <Image src={defaultPhoto}width="400" rounded className="mt-2 mb-3 mb-md-4 mx-auto d-block" fluid />
                     </Link>
                 
                 <Card.Text>
@@ -28,7 +27,7 @@ export default function Product ({productProp}) {
                 </Card.Text>
                 <Card.Text>
                     <p className="my-0">
-                       <strong>P{price.toLocaleString()+".00"}</strong>
+                       <strong>&#8369;{price.toLocaleString()+".00"}</strong>
                     </p>
                 </Card.Text>
             </Card.Body>
@@ -39,11 +38,11 @@ export default function Product ({productProp}) {
     );
 }
 
-Product.propTypes = {
+/* Product.propTypes = {
     //shape() used to check that a prop object conforms to a specific shape
     product: PropTypes.shape({
         name: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired
     })
-}
+} */

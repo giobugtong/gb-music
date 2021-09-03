@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, Redirect, useHistory } from 'react-router-dom';
-import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
 import UserContext from "../UserContext";
 /* import shoppingCart from "../icons/shopping-cart.svg";
 import profileIcon from "../icons/profile-icon.svg";
@@ -22,7 +22,14 @@ export default function AppNavbar () {
     }
     
     useEffect(() => {
-        setCartCount(userCart.length);
+        if (userCart.length > 0) {
+            let count = userCart.map(item => {
+                return item.quantity;
+            }).reduce((initial, current) => {
+                return initial + current;
+            })
+            setCartCount(count);
+        } else setCartCount(0);
     }, [userCart, window])
 
     let rightNav = (user.email) ?
@@ -56,12 +63,19 @@ export default function AppNavbar () {
                     <Tooltip>
                         My Cart
                     </Tooltip>}>
-                <Nav.Link className="mx-1 d-none d-md-inline icons" as={ NavLink } to="/my-cart">
+                <Nav.Link className="mx-1 d-none d-md-block icons" as={ NavLink } to="/my-cart">
                     <img width="24" alt="Shopping cart icon" src={shoppingCart}/>
-                    <span style={{display: cartCount > 0 ? "inline-block" : "none"}} className="cartCounter">{cartCount}</span>
+                    <span style={{display: cartCount > 0 ? "inline-block" : "none"}}>
+                    <Badge style={{marginLeft: "-3px"}} variant="light">{cartCount}</Badge>    
+                    </span>
                 </Nav.Link>
                     </OverlayTrigger>
-                <Nav.Link className="d-md-none" as={ NavLink } to="/my-cart">My Cart<span style={{display: cartCount > 0 ? "inline-block" : "none"}} className="cartCounter ml-1">{cartCount}</span></Nav.Link>
+                <Nav.Link className="d-md-none" as={ NavLink } to="/my-cart">
+                My Cart
+                <span style={{display: cartCount > 0 ? "inline-block" : "none"}}>
+                    <Badge style={{marginLeft: "5px"}} variant="light">{cartCount}</Badge>    
+                    </span>
+                </Nav.Link>
                 
                 <Nav.Link className="mx-2 d-none d-md-inline icons" as={ NavLink } to="/profile">
                     <OverlayTrigger key="bottom" placement="bottom" overlay={<Tooltip>

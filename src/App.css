@@ -51,11 +51,13 @@ input[type=number] {
 }
 
 .icons {
-  opacity: 70% !important;
+transform: scale(1);
+transition: ease 100ms;
 }
 
 .icons:hover {
-  opacity: 100% !important;
+  transform: scale(1.15);
+  transition: ease 100ms;
 }
 
 .cartCounter {

@@ -10,7 +10,6 @@ export default function CartContents (props) {
     const { productId, brandName, modelName, quantity, price } = cartItemProp;
     const [itemQuantity, setItemQuantity] = useState(quantity);
     const [decreaseButton, setDecreaseButton] = useState(true);
-    console.log(userCart.length)
     const removeFromCart = () => {
             Swal.fire({
             title: "Hold on!",
@@ -45,14 +44,11 @@ export default function CartContents (props) {
                     } else {
                         const Toast = Swal.mixin({
                             toast: true,
-                            position: 'top-end',
+                            position: "top",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                              toast.addEventListener('mouseenter', Swal.stopTimer)
-                              toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
+                            showCloseButton: true
                           })
                           fetchUserCart()
                           Toast.fire({
@@ -126,7 +122,7 @@ export default function CartContents (props) {
                 </InputGroup.Append>
                 </InputGroup>
                 </Col>
-                <Col md={2} className="my-2 my-md-auto text-center" ><span className="d-md-none font-weight-bold">Subtotal: </span>P{(price * itemQuantity).toLocaleString()}.00</Col>
+                <Col md={2} className="my-2 my-md-auto text-center" ><span className="d-md-none font-weight-bold">Subtotal: </span>&#8369;{(price * itemQuantity).toLocaleString()}.00</Col>
             </Row>
         </Container>
     )
