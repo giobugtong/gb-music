@@ -3,13 +3,13 @@ import { Row, Col, Card, Container } from "react-bootstrap";
 
 export default function Highlights () {
     return(
-        <Container>
-            <Row>
+
+            <Row className="mt-4">
                 <Col lg={4} className="mb-4">
                     <Card className="cardHighlight">
                         <Card.Body>
                             <Card.Title>
-                                <h2>Stylish</h2>
+                                <h2>Sample Text</h2>
                             </Card.Title>
                             <Card.Text>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit quaerat dolor voluptate explicabo adipisci tempore.
@@ -22,7 +22,7 @@ export default function Highlights () {
                     <Card className="cardHighlight">
                         <Card.Body>
                             <Card.Title>
-                                <h2>Best protection in its class</h2>
+                                <h2>Another Sample Text Here</h2>
                             </Card.Title>
                             <Card.Text>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, ipsa.
@@ -35,7 +35,7 @@ export default function Highlights () {
                     <Card className="cardHighlight">
                         <Card.Body>
                             <Card.Title>
-                                <h2>Very affordable</h2>
+                                <h2>Text Sample</h2>
                             </Card.Title>
                             <Card.Text>
                                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt omnis ex dolore tenetur recusandae libero doloribus saepe sit magnam laboriosam!
@@ -44,6 +44,6 @@ export default function Highlights () {
                     </Card>
                 </Col>
             </Row>
-        </Container>
+
     )
 }

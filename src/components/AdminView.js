@@ -81,7 +81,7 @@ export default function AdminView (props) {
                     <td>{product.brandName}</td>
                     <td>{product.modelName}</td>
                     <td>{product.description}</td>
-                    <td>{`P${product.price.toLocaleString()}.00`}</td>
+                    <td>&#8369;{`${product.price.toLocaleString()}.00`}</td>
                     <td className={product.isActive ? "text-success" : "text-danger"}>{product.isActive ? "Available" : "Unavailable"}</td>
                     <td className="d-flex justify-content-center">
                         <Button className="m-2" variant="warning" size="sm" onClick={() => openEdit(product)}>Update</Button>

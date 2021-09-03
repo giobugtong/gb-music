@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext } from "react";
-import { Container, Card, Button, InputGroup, FormControl } from "react-bootstrap";
+import { Container, Card, Button, InputGroup, FormControl, Fade } from "react-bootstrap";
 import { Link, useParams, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
@@ -15,32 +15,14 @@ export default function SpecificProduct () {
     const { productId } = useParams();
     const { user, setUser, fetchUserCart, userCart } = useContext(UserContext);
     const history = useHistory();
+    const [show, setShow] = useState(false)
 
-    useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
-        .then(res => res.json())
-        .then(data => {
-            setBrandName(data.brandName);
-            setModelName(data.modelName);
-            setDescription(data.description);
-            setPrice(data.price);
-        })
-    })
-
+    
     const setPreviousProduct = () => {
         localStorage.setItem("previousProduct",`/products/${productId}`);
         setUser({previousProduct: `/products/${productId}`});
     }
 
-    useEffect(() => {
-        if (quantity > 1) {
-            setDecreaseButton(false);
-        } else {
-            setDecreaseButton(true);
-            setQuantity(1);
-        }
-    }, [quantity, decreaseButton])
-    
     const addToCart = (productId) => {
         
         fetch(`${process.env.REACT_APP_API_URL}/products/${productId}/add-to-cart`, {
@@ -83,8 +65,31 @@ export default function SpecificProduct () {
         })
         .catch(err => console.log(err))
     }
-
+    
+    useEffect(() => {
+        if (quantity > 1) {
+            setDecreaseButton(false);
+        } else {
+            setDecreaseButton(true);
+            setQuantity(1);
+        }
+    }, [quantity, decreaseButton])
+    
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
+        .then(res => res.json())
+        .then(data => {
+            setBrandName(data.brandName);
+            setModelName(data.modelName);
+            setDescription(data.description);
+            setPrice(data.price);
+        })
+        setShow(true);
+    }, [])
+    
     return(
+        <Fade in={show}>
+
         <Container>
             <Card className="my-5">
                 <h4 className="p-3 p-md-4 text-dark text-center">{brandName} {modelName}</h4>
@@ -118,5 +123,6 @@ export default function SpecificProduct () {
                 </Card.Footer>
             </Card>
         </Container>
+        </Fade>
     )
 }

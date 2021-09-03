@@ -1,15 +1,19 @@
-import React, { useEffect } from "react";
-import { Card, Image } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Card, Fade, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../images/default-product-photo.jpeg"
 
 export default function Product ({productProp}) {
     const { _id, brandName, modelName, description, price, photo } = productProp;
+    const [show, setShow] = useState(false)
+
     
-    /* useEffect(() => {
-    }, []) */
+    useEffect(() => {
+        setShow(true)
+    }, [])
     
     return(
+        <Fade in={show}>
         <Card className="cardHighlight m-2">
             <Card.Body>
                     <Card.Title className="mb-lg-4 text-center text-md-left">
@@ -35,14 +39,6 @@ export default function Product ({productProp}) {
                 <Link className="text-dark" to={`/products/${_id}`}>See more details</Link>
             </Card.Footer>
         </Card>
+        </Fade>
     );
 }
-
-/* Product.propTypes = {
-    //shape() used to check that a prop object conforms to a specific shape
-    product: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired
-    })
-} */

@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, NavLink, Redirect, useHistory } from 'react-router-dom';
-import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
+import { Link, NavLink, useHistory } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip, Badge, Image } from "react-bootstrap";
 import UserContext from "../UserContext";
+import logo from "../images/gb-music-logo-sm.png"
 /* import shoppingCart from "../icons/shopping-cart.svg";
 import profileIcon from "../icons/profile-icon.svg";
 import logoutIcon from "../icons/logout-icon.svg"; */
@@ -112,12 +113,18 @@ export default function AppNavbar () {
     return(
         <Navbar id="navbar" variant="dark" expand="md">
             <Navbar.Brand as={ Link } to="/">
-                E-Commerce App
+            <Image
+                src={logo}
+                width="35"
+                height="35"
+                className="ml-1 ml-md-3"
+                alt="g.b. music logo"
+            />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link as={ NavLink } to="/">Home</Nav.Link>
+                    {/* <Nav.Link as={ NavLink } to="/">Home</Nav.Link> */}
                     <NavDropdown href="/products" title="Products"  id="basic-nav-dropdown">
                         <NavDropdown.Item href="/products" className="font-weight-bold">ALL PRODUCTS</NavDropdown.Item>
                         <NavDropdown.Divider />

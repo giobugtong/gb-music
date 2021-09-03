@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Row, Col, Button, InputGroup, FormControl, Container } from "react-bootstrap"
+import { Row, Col, Button, InputGroup, FormControl, Container, Fade } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
@@ -10,6 +10,8 @@ export default function CartContents (props) {
     const { productId, brandName, modelName, quantity, price } = cartItemProp;
     const [itemQuantity, setItemQuantity] = useState(quantity);
     const [decreaseButton, setDecreaseButton] = useState(true);
+    const [show, setShow] = useState(false)
+
     const removeFromCart = () => {
             Swal.fire({
             title: "Hold on!",
@@ -31,8 +33,8 @@ export default function CartContents (props) {
                 })
                 .then(res => res.json())
                 .then(data => {         
-                    console.log(data.length)
-                    console.log(userCart.length)
+                    console.log("data.length is " + data.length)
+                    console.log("userCart.length is " + userCart.length)
                    
                     if (data.emptyBody || data.notInCart) {
                         Swal.fire({
@@ -98,11 +100,16 @@ export default function CartContents (props) {
             setItemQuantity(1);
         }
         updateQuantity()
-        fetchUserCart()
     }, [itemQuantity, decreaseButton])
-
+    
+    
+    useEffect(() => {
+        fetchUserCart()
+        setShow(true);
+    }, [])
 
     return(
+        <Fade in={show}>
         <Container>
          <hr></hr>
             <Row className="my-4 my-md-3 py-2 p-md-3">
@@ -125,5 +132,6 @@ export default function CartContents (props) {
                 <Col md={2} className="my-2 my-md-auto text-center" ><span className="d-md-none font-weight-bold">Subtotal: </span>&#8369;{(price * itemQuantity).toLocaleString()}.00</Col>
             </Row>
         </Container>
+        </Fade>
     )
 }

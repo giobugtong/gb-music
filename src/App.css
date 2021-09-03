@@ -107,7 +107,7 @@ transition: ease 100ms;
 
 .mdBannerText {
   position: relative;
-  top: 30vh;
+  top: 25vh;
 }
 .mdBannerText h1, .mdBannerText h5 {
   text-shadow: 0px 0px 8px #3a3c3d;

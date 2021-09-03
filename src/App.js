@@ -18,8 +18,6 @@ import MyCart from './pages/MyCart';
 
 export default function App() {
   
-
-
   const [user, setUser] = useState({
     id: localStorage.getItem("id"),
     email: localStorage.getItem("email"),

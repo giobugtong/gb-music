@@ -63,7 +63,7 @@ export default function Login () {
                     position: 'top',
                     showConfirmButton: false,
                     showCloseButton: true,
-                    timer: 2000,
+                    timer: 2600,
                     timerProgressBar: true,
                     showCloseButton: true
                   })
@@ -116,7 +116,7 @@ export default function Login () {
                         <Button variant="secondary" type="submit" className="mt-5 btn-block" disabled>Login</Button>
                     }
                 </Form>
-                <p className="text-center mt-5">Not a member yet? <Link to="/register">Register now, it's free!</Link></p>
+                <p className="text-center mt-5">Not a member yet? <Link className="text-info" to="/register">Register now, it's free!</Link></p>
             </Col>
         </Row>
     )

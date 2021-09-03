@@ -2,17 +2,18 @@ import React, {useEffect, useContext, useState } from "react";
 import UserContext from "../UserContext";
 import UserCart from "../components/UserCart";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Button, FormGroup, FormControl, } from "react-bootstrap";
+import { Container, Row, Col, Button, FormGroup, FormControl, Fade } from "react-bootstrap";
 import emptyCartImg from "../images/empty-cart.png";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
-
+import Marquee from "react-fast-marquee";
 
 export default function MyCart ()  {
     const { user, userCart, fetchUserCart } = useContext(UserContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [discountCode, setDiscountCode] = useState("");
     const history = useHistory();
+    const [show, setShow] = useState(false)
 
     const sumAmount = () => {
         if (userCart.length > 0) {
@@ -28,7 +29,6 @@ export default function MyCart ()  {
     }
     
     const checkout = () => {
-        fetchUserCart()
         fetch(`${process.env.REACT_APP_API_URL}/users/checkout`, {
             method: "POST",
             headers: {
@@ -67,11 +67,13 @@ export default function MyCart ()  {
     useEffect(() => {
         sumAmount();
     }, [userCart])
+
+    useEffect(() => {
+        setShow(true);
+    }, [])
     
     let isCartEmpty = (userCart.length) ?
-    (
-        <>
-
+    (   <>
         <Container>
             <Row className="text-center d-none d-md-flex">
                 <Col md={8} className="text-left"><h4>Product</h4></Col>
@@ -96,21 +98,27 @@ export default function MyCart ()  {
                 <Col md={12} onClick={()=> checkout()} className="d-none d-md-block mt-2 mb-4 mx-auto"><Button className="themeColor float-right py-2 px-5 font-weight-bold">Checkout</Button></Col>
             </Row>
         </Container>
-
         </>
+
     ) :
     ( 
-        <>
+        <Fade in={show}>
         <Container className="mt-2 mt-md-5 pt-md-5 text-center">
             <img src={emptyCartImg} width="150" alt="Image of a sad, empty cart" className="img-fluid m-4 m-md-5"/>
             <h3 className="my-3">Your cart is empty!</h3>
             <p><Link to={"/products"}>Add items</Link> to your cart and see them here.</p>
         </Container>
-        </>
+        </Fade>
     )
 
     return(
         <>
+            <Marquee style={{color: "white"}, {backgroundColor: "white"}} gradientWidth={50} pauseOnHover gradient={true} speed={60} >
+                <span>Use the following discount voucher codes at checkout:</span>
+                <span className="mx-3">FRONTEND15</span>
+                <span className="mx-3">BACKEND20</span>
+                <span className="mx-3">FULLSTACK30</span>
+            </Marquee>
         <Container className="mt-2 mt-md-5">
         <h2 className="my-4">My Cart</h2>
 
