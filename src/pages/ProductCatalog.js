@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../UserContext";
 import AdminView from "../components/AdminView";
 import UserView from "../components/UserView";
-import Swal from "sweetalert2";
 
 export default function ProductCatalog () {
-    const { user } = useContext(UserContext);
+    const { user, changeDocTitle, cartCount } = useContext(UserContext);
     const [allProducts, setAllProducts] = useState([]);
 
     const fetchData = () => {
@@ -19,6 +18,18 @@ export default function ProductCatalog () {
     useEffect(() => {
         fetchData()
     }, [])
+    
+    useEffect(() => {
+        if (user.isAdmin) {
+            changeDocTitle("Admin Dashboard")
+        } else {
+            changeDocTitle(
+                cartCount > 0 ? `G.B. Music: Products (${cartCount})`
+                : "G.B. Music: Products"
+            )
+        }
+
+    }, [cartCount, user])
 
     return(
         <>

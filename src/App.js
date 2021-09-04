@@ -17,7 +17,8 @@ import MyProfile from './pages/MyProfile';
 import MyCart from './pages/MyCart';
 
 export default function App() {
-  
+
+  const [cartCount, setCartCount] = useState(0);
   const [user, setUser] = useState({
     id: localStorage.getItem("id"),
     email: localStorage.getItem("email"),
@@ -28,7 +29,6 @@ export default function App() {
   });
 
   const [userCart, setUserCart] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
 
   const unsetUser = () => {
     localStorage.clear();
@@ -42,8 +42,19 @@ export default function App() {
     });
   }
 
-  const fetchUserCart = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
+  useEffect(() => {
+    if (userCart.length > 0) {
+        let count = userCart.map(item => {
+            return item.quantity;
+        }).reduce((initial, current) => {
+            return initial + current;
+        })
+        setCartCount(count);
+    } else setCartCount(0);
+}, [userCart, window])
+
+  const fetchUserCart = async () => {
+    await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
     .then(res => res.json())
     .then(data => {
         console.log(data)
@@ -57,16 +68,22 @@ export default function App() {
             text: err
         })
     })
-    setCartCount(userCart.length)
+  }
+
+  const changeDocTitle = (title) => {
+    document.title = title
   }
   
   useEffect(() => {
     fetchUserCart();
-}, [])
+  }, [])
+
+
+
 
   return(
     <Fragment>
-      <UserContext.Provider value={{ user, setUser, unsetUser, userCart, fetchUserCart }}>
+      <UserContext.Provider value={{ user, setUser, unsetUser, userCart, setUserCart, cartCount, fetchUserCart, changeDocTitle }}>
         <Router>
         <AppNavbar />
           <Container fluid>

@@ -13,7 +13,7 @@ export default function SpecificProduct () {
     const [quantity, setQuantity] = useState(1);
     const [decreaseButton, setDecreaseButton] = useState(true);
     const { productId } = useParams();
-    const { user, setUser, fetchUserCart, userCart } = useContext(UserContext);
+    const { user, setUser, fetchUserCart, cartCount, changeDocTitle } = useContext(UserContext);
     const history = useHistory();
     const [show, setShow] = useState(false)
 
@@ -87,9 +87,12 @@ export default function SpecificProduct () {
         setShow(true);
     }, [])
     
+    useEffect(() => {
+        changeDocTitle(cartCount > 0 ? `${brandName} ${modelName} (${cartCount})` : `${brandName} ${modelName}`)
+    }, [cartCount, brandName, modelName])
+
     return(
         <Fade in={show}>
-
         <Container>
             <Card className="my-5">
                 <h4 className="p-3 p-md-4 text-dark text-center">{brandName} {modelName}</h4>

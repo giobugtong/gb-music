@@ -5,7 +5,7 @@ import Swal from "sweetalert2"
 import UserContext from "../UserContext";
 
 export default function Login () {
-    const { user, setUser, fetchUserCart } = useContext(UserContext);
+    const { user, setUser, fetchUserCart, changeDocTitle } = useContext(UserContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
@@ -13,14 +13,7 @@ export default function Login () {
     const [errorStyle, setErrorStyle] = useState("");
     const history = useHistory();
 
-    useEffect(() => {
-        if(email && password) {
-            setLoginButton(true);
-        } else {
-            setLoginButton(false);
-        }
-    }, [email, password]);
-
+    
     const loginUser = e => {
         e.preventDefault();
         fetchUserCart();
@@ -51,53 +44,65 @@ export default function Login () {
                     userCart: data.foundUser.userCart
                 });
                 // Swal.fire({
-                //     title: "Log in success!",
-                //     icon: "success",
-                //     text: `Welcome, ${data.foundUser.firstName}! Add to cart now!`,
-                //     timer: 5000,
-                //     confirmButtonText: "Let's go!"
-                // })
-
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    showCloseButton: true,
-                    timer: 2600,
-                    timerProgressBar: true,
-                    showCloseButton: true
-                  })
-                  
-                  Toast.fire({
-                    icon: 'success',
-                    title: 'You are now logged in'
-                  })
-                
-                
-                setErrorStyle("");
-
-                if(data.foundUser.isAdmin) {
-                    history.push("/products");
-                } else {
-                    user.previousProduct ? history.push(user.previousProduct) :
-                    history.push("/")
+                    //     title: "Log in success!",
+                    //     icon: "success",
+                    //     text: `Welcome, ${data.foundUser.firstName}! Add to cart now!`,
+                    //     timer: 5000,
+                    //     confirmButtonText: "Let's go!"
+                    // })
+                    
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        timer: 2600,
+                        timerProgressBar: true,
+                        showCloseButton: true
+                    })
+                    
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'You are now logged in'
+                    })
+                    
+                    
+                    setErrorStyle("");
+                    
+                    if(data.foundUser.isAdmin) {
+                        history.push("/products");
+                    } else {
+                        user.previousProduct ? history.push(user.previousProduct) :
+                        history.push("/")
+                    }
+                } else if (data.incorrectPassword) {
+                    if (errorMsg === `Incorrect password. Please try again.`) {
+                        setErrorMsg(`Incorrect password. Please check your spelling.`);
+                        setErrorStyle("border-danger");
+                    } else {
+                        setErrorMsg("Incorrect password. Please try again.");
+                        setErrorStyle("border-danger");
+                    }
+                } else if (data.unregisteredUser) {
+                    setErrorMsg("Unregistered user or incorrect email. Please try again.");
                 }
-            } else if (data.incorrectPassword) {
-                if (errorMsg === `Incorrect password. Please try again.`) {
-                    setErrorMsg(`Incorrect password. Please check your spelling.`);
-                    setErrorStyle("border-danger");
-                } else {
-                    setErrorMsg("Incorrect password. Please try again.");
-                    setErrorStyle("border-danger");
-                }
-            } else if (data.unregisteredUser) {
-                setErrorMsg("Unregistered user or incorrect email. Please try again.");
+            })
+        }
+        
+        useEffect(() => {
+            if(email && password) {
+                setLoginButton(true);
+            } else {
+                setLoginButton(false);
             }
-        })
-    }
-   
-    return(
-        <Row className="mt-3 mt-md-5 mb-4">
+        }, [email, password]);
+
+        useEffect(() => {
+            changeDocTitle("G.B. Music: Login")
+        }, [])
+
+        return(
+            <Row className="mt-3 mt-md-5 mb-4">
             <Col xs={11} sm={9} md={6} lg={4} xl={3} className="mx-auto">
                 <h1 className="mb-4">Login</h1>
                 <Form onSubmit={e => loginUser(e)}>

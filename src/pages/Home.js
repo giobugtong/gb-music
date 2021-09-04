@@ -4,11 +4,15 @@ import Banner from "../components/Banner";
 import Highlights from "../components/Highlights";
 
 export default function Home () {
-    const { fetchUserCart } = useContext(UserContext);
+    const { fetchUserCart, changeDocTitle, cartCount } = useContext(UserContext);
 
     useEffect(() => {
-        fetchUserCart()
+        fetchUserCart();
     }, [])
+    
+    useEffect(() => {
+        changeDocTitle(cartCount > 0 ? `G.B. Music (${cartCount})` : "G.B. Music")
+    }, [cartCount])
 
     return(
         <>

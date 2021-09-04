@@ -7,7 +7,7 @@ import Order from "../components/Order"
 import MyOrders from "../components/MyOrders";
 
 export default function MyProfile () {
-    const { user } = useContext(UserContext);
+    const { user, changeDocTitle, cartCount } = useContext(UserContext);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [joinDate, setJoinDate] = useState("");
@@ -43,6 +43,10 @@ export default function MyProfile () {
         fetchProfile();
         setShow(true)
     }, []);
+
+    useEffect(() => {
+        changeDocTitle(cartCount > 0 ? `My Profile (${cartCount})` : `My Profile`)
+    }, [cartCount])
 
     return (
         <Fade in={show}>

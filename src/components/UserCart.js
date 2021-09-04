@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import UserContext from "../UserContext";
 import CartContents from "./CartContents";
 
 
-export default function UserCart ({userCart}) {
-    const { user, fetchUserCart } = useContext(UserContext);
+export default function UserCart () {
+    const { userCart, fetchUserCart } = useContext(UserContext);
     const [cartContents, setCartContents] = useState([]);
 
     useEffect(() => {
@@ -16,8 +18,11 @@ export default function UserCart ({userCart}) {
             });
             setCartContents(userCartContents);
         }
-    }, [user])
+    }, [userCart])
 
+    useEffect(()=> {
+        fetchUserCart()
+    }, [])
 
     return(
         <>

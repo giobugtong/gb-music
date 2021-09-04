@@ -1,19 +1,16 @@
 import React, {useEffect, useContext, useState } from "react";
+import EmptyCart from "./EmptyCart"
 import UserContext from "../UserContext";
 import UserCart from "../components/UserCart";
-import { Link } from "react-router-dom";
-import { Container, Row, Col, Button, FormGroup, FormControl, Fade } from "react-bootstrap";
-import emptyCartImg from "../images/empty-cart.png";
+import { Container, Row, Col, Button, FormGroup, FormControl } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
 import Marquee from "react-fast-marquee";
+import { Link } from "react-router-dom";
 
 export default function MyCart ()  {
-    const { user, userCart, fetchUserCart } = useContext(UserContext);
+    const { user, userCart, fetchUserCart, changeDocTitle, cartCount } = useContext(UserContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [discountCode, setDiscountCode] = useState("");
-    const history = useHistory();
-    const [show, setShow] = useState(false)
 
     const sumAmount = () => {
         if (userCart.length > 0) {
@@ -29,7 +26,7 @@ export default function MyCart ()  {
     }
     
     const checkout = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/users/checkout`, {
+        fetch(`${process.env.REACT_APP_API_URL}/orders/checkout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -64,13 +61,71 @@ export default function MyCart ()  {
 
     }
 
-    useEffect(() => {
-        sumAmount();
-    }, [userCart])
+    const removeAllCartItems = () => {
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: `This will remove ALL items in your cart.`,
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "I'm sure",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/remove-all-cart-items`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.cartEmptied) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            icon: "question",
+                            position: "top",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showCloseButton: true
+                          })
+                        Toast.fire({
+                            icon: "info",
+                            title: "Cart emptied."
+                        })
+                        fetchUserCart();
+    
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oh no.",
+                            text: "Something went wrong",
+                            showConfirmButton: false,
+                            showCancelButton: true,
+                            cancelButtonText: "Ok",
+                            timer: 2500
+                        })
+                    }
+                })
+            }
+        })
+        
+    }
 
     useEffect(() => {
-        setShow(true);
+        sumAmount();
+        
+    }, [userCart])
+
+    useEffect(()=> {
+        fetchUserCart();
     }, [])
+
+    useEffect(() => {
+        changeDocTitle(cartCount > 0 ? `My Cart (${cartCount})` : `My Cart`)
+    }, [cartCount])
     
     let isCartEmpty = (userCart.length) ?
     (   <>
@@ -81,8 +136,11 @@ export default function MyCart ()  {
                 <Col md={2}><h4>Subtotal</h4></Col>
             </Row>
         </Container>
-           <UserCart userCart={userCart}/>
+           {/* <UserCart userCart={userCart}/> */}
+           <UserCart />
+           
             <hr></hr>
+        <Link className="text-danger d-block text-right" to="#" onClick={()=> removeAllCartItems()} >Remove all</Link>
         <Container>
             <Row className="justify-content-end text-right text-md-center mt-4 mt-md-5">
                 <Col md={2}><h3>Total</h3></Col>
@@ -102,13 +160,7 @@ export default function MyCart ()  {
 
     ) :
     ( 
-        <Fade in={show}>
-        <Container className="mt-2 mt-md-5 pt-md-5 text-center">
-            <img src={emptyCartImg} width="150" alt="Image of a sad, empty cart" className="img-fluid m-4 m-md-5"/>
-            <h3 className="my-3">Your cart is empty!</h3>
-            <p><Link to={"/products"}>Add items</Link> to your cart and see them here.</p>
-        </Container>
-        </Fade>
+        <EmptyCart />
     )
 
     return(
@@ -123,6 +175,7 @@ export default function MyCart ()  {
         <h2 className="my-4">My Cart</h2>
 
         {isCartEmpty}
+        
         
         </Container>
         </>

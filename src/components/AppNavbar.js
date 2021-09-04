@@ -13,25 +13,13 @@ import logoutIcon from "../icons/white-logout.png";
 
 export default function AppNavbar () {
     const history = useHistory();
-    const { user, unsetUser, userCart, fetchUserCart } = useContext(UserContext);
-    const [cartCount, setCartCount] = useState(0);
+    const { user, unsetUser, userCart, fetchUserCart, cartCount } = useContext(UserContext);
 
     const logout = () => {
         unsetUser();
         fetchUserCart();
         window.location.replace("/login");
     }
-    
-    useEffect(() => {
-        if (userCart.length > 0) {
-            let count = userCart.map(item => {
-                return item.quantity;
-            }).reduce((initial, current) => {
-                return initial + current;
-            })
-            setCartCount(count);
-        } else setCartCount(0);
-    }, [userCart, window])
 
     let rightNav = (user.email) ?
     (

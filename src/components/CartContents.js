@@ -5,14 +5,14 @@ import Swal from "sweetalert2";
 import UserContext from "../UserContext";
 
 export default function CartContents (props) {
-    const {cartItemProp} = props;
-    const { user, userCart, setUserCart, fetchUserCart } = useContext(UserContext);
+    const { cartItemProp } = props;
     const { productId, brandName, modelName, quantity, price } = cartItemProp;
+    const { user, userCart, setUserCart, fetchUserCart } = useContext(UserContext);
     const [itemQuantity, setItemQuantity] = useState(quantity);
     const [decreaseButton, setDecreaseButton] = useState(true);
     const [show, setShow] = useState(false)
 
-    const removeFromCart = () => {
+    const removeFromCart = (id) => {
             Swal.fire({
             title: "Hold on!",
             text: `Are you sure you want to remove ${brandName} ${modelName} from your cart?`,
@@ -28,11 +28,11 @@ export default function CartContents (props) {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        productId: productId
+                        productId: id
                     })
                 })
                 .then(res => res.json())
-                .then(data => {         
+                .then(data => {       
                     console.log("data.length is " + data.length)
                     console.log("userCart.length is " + userCart.length)
                    
@@ -44,6 +44,7 @@ export default function CartContents (props) {
                             timer: 4000
                         })
                     } else {
+                        fetchUserCart()
                         const Toast = Swal.mixin({
                             toast: true,
                             position: "top",
@@ -52,11 +53,10 @@ export default function CartContents (props) {
                             timerProgressBar: true,
                             showCloseButton: true
                           })
-                          fetchUserCart()
-                          Toast.fire({
+                        Toast.fire({
                             icon: "info",
                             title: 'Product removed from cart'
-                          })
+                        })
                     }
                 })
                 .catch(err => console.log(err))
@@ -64,8 +64,8 @@ export default function CartContents (props) {
         })
     }
 
-    const updateQuantity = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/update-cart`, {
+    const updateQuantity = async () => {
+        await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/update-cart`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -78,6 +78,7 @@ export default function CartContents (props) {
         })
         .then(response => response.json())
         .then(data => {
+            fetchUserCart()
             if (data.err) {
                 Swal.fire({
                     title: "Oops! :(",
@@ -86,7 +87,7 @@ export default function CartContents (props) {
                 })
             }
         })
-        fetchUserCart()
+        .then(fetchUserCart())
     }
     
     useEffect(() => {
@@ -104,7 +105,6 @@ export default function CartContents (props) {
     
     
     useEffect(() => {
-        fetchUserCart()
         setShow(true);
     }, [])
 
@@ -114,8 +114,7 @@ export default function CartContents (props) {
          <hr></hr>
             <Row className="my-4 my-md-3 py-2 p-md-3">
                 <Col md={6} className="my-2 my-md-auto text-center text-md-left"> <Link className="text-dark" to={`/products/${productId}`} ><h5>{brandName} {modelName}</h5></Link></Col>
-                {/* <Col md={2} className="mb-2 my-md-auto"><Button size="sm" variant="secondary" className="btn-block" onClick={()=> removeFromCart()} >Remove</Button></Col> */}
-                <Col md={2} className="mb-2 my-md-auto text-center"><Link as={Button} to="/my-cart" className="text-danger" onClick={()=> removeFromCart()} >Remove</Link></Col>
+                <Col md={2} className="mb-2 my-md-auto text-center"><Link to="/my-cart" className="text-info" onClick={() => removeFromCart(productId)} >Remove</Link></Col>
                 <Col md={2} className="mb-2 m-md-auto">
                 <InputGroup className="quantity m-auto">
                 <InputGroup.Prepend>

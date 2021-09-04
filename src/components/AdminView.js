@@ -1,10 +1,11 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useContext} from "react";
+import UserContext from "../UserContext";
 import { Table, Button, Modal, Form, InputGroup, FormControl } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 export default function AdminView (props) {
     const { productData, fetchData } = props;
-
+    const { changeDocTitle } = useContext(UserContext);
     const [productId, setProductId] = useState("");
     const [products, setProducts] = useState([]);
     const [brandName, setBrandName] = useState("");
@@ -96,6 +97,10 @@ export default function AdminView (props) {
         })
         setProducts(productsArray);
     }, [productData])
+
+    useEffect(() => {
+        changeDocTitle("G.B. Music: Admin Dashboard")
+    }, [])
 
     const addProduct = (e) => {
         e.preventDefault();
@@ -234,6 +239,10 @@ export default function AdminView (props) {
             setWeight(1);
         }
     }, [weight])
+
+    useEffect(() => {
+        changeDocTitle("Admin Dashboard");
+    }, [])
 
     return(
         <>

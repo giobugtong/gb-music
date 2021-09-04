@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Fade, Image } from "react-bootstrap";
+import { Button, Fade, Image, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import largeLogo from "../images/gb-music-logo-lg.png"
+import Highlights from "./Highlights";
 
 
 export default function Banner () {
@@ -14,25 +15,25 @@ export default function Banner () {
     return (
         <>
         <Fade in={show}>
-            <div className="bannerBG d-none d-md-block">
-                <div className="text-light text-center mdBannerText">
-                    <Image fluid width="220px" className="mb-4" rounded src={largeLogo}/>
+            <Row className="bannerBG d-none d-md-flex justify-content-center align-items-center">
+                <Col md={6} className="text-light text-center mdBannerText">
+                    <Image fluid width="220px" className="mb-5" rounded src={largeLogo}/>
                     <h1 className="d-none">g.b. music</h1>
                     <h5 className="mb-4">Let your fingers do the talking.</h5>
                     <Button variant="light" as={ Link } to="/products" className="px-5 py-3 themeColor">Shop now</Button>
-                </div>
-            </div>
+                </Col>
+            </Row>
         </Fade>
 
         <Fade in={show}>
-            <div className="smBannerBG d-xs-block d-md-none">
-                <div className="text-light text-center smBannerText mx-2">
+            <Row className="smBannerBG d-xs-flex d-md-none justify-content-center align-items-center">
+                <Col className="text-light text-center smBannerText mx-2">
                 <Image fluid width="200px" className="mb-4" rounded src={largeLogo}/>
                     <h1 className="d-none">g.b. music</h1>
                     <h5 className="mb-4">Let your fingers do the talking.</h5>
                     <Button variant="light" as={ Link } to="/products" className="px-5 py-3 themeColor">Shop now</Button>
-                </div>
-            </div>
+                </Col>
+            </Row>
         </Fade>
         </>
     );

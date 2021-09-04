@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2"
+import UserContext from "../UserContext";
 
 export default function Register () {
     const [firstName, setFirstName] = useState("");
@@ -14,6 +15,7 @@ export default function Register () {
     const [mismatchedPassword, setMismatchedPassword] = useState("");
     const [alreadyRegistered, setAlreadyRegistered] = useState("");
     const [registerButton, setRegisterButton] = useState(false);
+    const { changeDocTitle } = useContext(UserContext);
     const history = useHistory();
 
     useEffect(()=>{
@@ -79,6 +81,10 @@ export default function Register () {
         setShowLoginLink("d-none");
         setAlreadyRegistered("");
     }
+
+    useEffect(() => {
+        changeDocTitle("G.B. Music: Register")
+    })
     
     return(
         <Row className="mt-3 mt-md-5 pb-5">
