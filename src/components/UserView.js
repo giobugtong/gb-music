@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Product from "./Product"
-import { Row, Col, Container } from "react-bootstrap"
+import { Row, Col } from "react-bootstrap"
 import UserContext from "../UserContext";
 
 export default function UserView ({productData}) {

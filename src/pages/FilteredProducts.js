@@ -10,12 +10,7 @@ export default function FilteredProducts () {
     const [allProducts, setAllProducts] = useState([]);
 
     const fetchData = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/products/filtered/${filter}`, {
-            headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-            }
-        })
+        fetch(`${process.env.REACT_APP_API_URL}/products/filtered/${filter}`)
         .then(res => res.json())
         .then(data => {
             console.log(data)

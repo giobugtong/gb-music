@@ -93,7 +93,7 @@ export default function App() {
 
               <Route exact path="/" component={ Home } />
               <Route exact path="/products" component={ ProductCatalog } />
-
+              {/* <Route exact path="/some-products/:filter" component={ FilteredProducts } /> */}
               <Route exact path="/some-products/:filter">
                 {user.isAdmin ? <Redirect to="/products"/> : <FilteredProducts/> }
               </Route>
