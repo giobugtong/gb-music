@@ -11,6 +11,8 @@ export default function MyCart ()  {
     const { user, userCart, fetchUserCart, changeDocTitle, cartCount } = useContext(UserContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [discountCode, setDiscountCode] = useState("");
+    const [discountError, setDiscountError] = useState("");
+    const [errorStyle, setErrorStyle] = useState("");
 
     const sumAmount = () => {
         if (userCart.length > 0) {
@@ -26,38 +28,45 @@ export default function MyCart ()  {
     }
     
     const checkout = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/orders/checkout`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-            },
-            body: JSON.stringify({
-                discountCode: discountCode.toUpperCase()
+        if (discountCode === "FULLSTACK30" || discountCode === "BACKEND20" || discountCode === "FRONTEND15" || discountCode === "") {
+            setDiscountError("")
+            setErrorStyle("")
+            fetch(`${process.env.REACT_APP_API_URL}/orders/checkout`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    discountCode: discountCode
+                })
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.orderPlaced) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Order placed!",
-                    text: "Thank you for your purchase. View your orders in My Profile.",
-                    showConfirmButton: true,
-                    confirmButtonText: "Go to My Profile",
-                    showDenyButton: true,
-                    denyButtonText: "Keep shopping"
-                })
-                .then(result => {
-                    if (result.isConfirmed) {
-                        window.location.replace("/profile");
-                    } else if (result.isDenied) {
-                        window.location.replace("/products");
-                    }
-                    fetchUserCart();
-                })
-            }
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.orderPlaced) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Order placed!",
+                        text: "Thank you for your purchase. View your orders in My Profile.",
+                        showConfirmButton: true,
+                        confirmButtonText: "Go to My Profile",
+                        showDenyButton: true,
+                        denyButtonText: "Keep shopping"
+                    })
+                    .then(result => {
+                        if (result.isConfirmed) {
+                            window.location.replace("/profile");
+                        } else if (result.isDenied) {
+                            window.location.replace("/products");
+                        }
+                        fetchUserCart();
+                    })
+                }
+            })
+        } else {
+            setDiscountError("Invalid Voucher Code");
+            setErrorStyle("border-danger");
+        }
 
     }
 
@@ -119,10 +128,6 @@ export default function MyCart ()  {
         
     }, [userCart])
 
-    useEffect(()=> {
-        fetchUserCart();
-    }, [])
-
     useEffect(() => {
         changeDocTitle(cartCount > 0 ? `My Cart (${cartCount})` : `My Cart`)
     }, [cartCount])
@@ -148,8 +153,9 @@ export default function MyCart ()  {
             </Row>
             <Row className="justify-content-end mt-2">
                 <Col md={4} lg={3} className="text-right">
+                <div className="text-danger mb-3">{discountError}</div>
                     <FormGroup>
-                        <FormControl value={discountCode} onChange={e => setDiscountCode(e.target.value)} type="text" placeholder="Enter Voucher Code"></FormControl>
+                        <FormControl className={errorStyle} value={discountCode} onChange={e => setDiscountCode(e.target.value)} type="text" placeholder="Enter Voucher Code"></FormControl>
                     </FormGroup>
                 </Col>
                 <Col md={12} onClick={()=> checkout()} className="d-md-none mt-2 mb-5 mx-auto"><Button className="themeColor py-2 btn-block font-weight-bold">Checkout</Button></Col>

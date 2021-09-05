@@ -3,9 +3,6 @@ import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip, Badge, Image } from "react-bootstrap";
 import UserContext from "../UserContext";
 import logo from "../images/gb-music-logo-sm.png"
-/* import shoppingCart from "../icons/shopping-cart.svg";
-import profileIcon from "../icons/profile-icon.svg";
-import logoutIcon from "../icons/logout-icon.svg"; */
 
 import shoppingCart from "../icons/white-shopping-cart.png";
 import profileIcon from "../icons/white-profile.png";
@@ -13,7 +10,7 @@ import logoutIcon from "../icons/white-logout.png";
 
 export default function AppNavbar () {
     const history = useHistory();
-    const { user, unsetUser, userCart, fetchUserCart, cartCount } = useContext(UserContext);
+    const { user, unsetUser, fetchUserCart, cartCount } = useContext(UserContext);
 
     const logout = () => {
         unsetUser();
@@ -112,26 +109,19 @@ export default function AppNavbar () {
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    {/* <Nav.Link as={ NavLink } to="/">Home</Nav.Link> */}
                     <NavDropdown href="/products" title="Products"  id="basic-nav-dropdown">
                         <NavDropdown.Item href="/products" className="font-weight-bold">ALL PRODUCTS</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.ItemText className="font-weight-bold">Fender</NavDropdown.ItemText>
-                        <NavDropdown.Item href="">Acoustic</NavDropdown.Item>
-                        <NavDropdown.Item href="">Electric</NavDropdown.Item>
+                        <NavDropdown.Item href="/some-products/acoustic" >Acoustic guitars</NavDropdown.Item>
+                        <NavDropdown.Item href="/some-products/electric" >Electric guitars</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.ItemText className="font-weight-bold">Marshall</NavDropdown.ItemText>
-                        <NavDropdown.Item href="">Acoustic</NavDropdown.Item>
-                        <NavDropdown.Item href="">Electric</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item className="font-weight-bold">Amplifiers</NavDropdown.Item>
+                        <NavDropdown.Item href="/some-products/amplifier" >Amplifiers</NavDropdown.Item>
 
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="" className="font-weight-bold">Accessories</NavDropdown.Item>
+                        <NavDropdown.Item href="/some-products/accessory" >Accessories</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 <Nav className="ml-auto">
-                    {/* {cartIcon} */}
                     {rightNav}
                 </Nav>
             </Navbar.Collapse>

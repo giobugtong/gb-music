@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Fade, Image, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import largeLogo from "../images/gb-music-logo-lg.png"
+import UserContext from "../UserContext";
 import Highlights from "./Highlights";
 
 
 export default function Banner () {
     const [show, setShow] = useState(false)
+    const { user } = useContext(UserContext)
 
     useEffect(() => {
         setShow(true)
@@ -20,7 +22,7 @@ export default function Banner () {
                     <Image fluid width="220px" className="mb-5" rounded src={largeLogo}/>
                     <h1 className="d-none">g.b. music</h1>
                     <h5 className="mb-4">Let your fingers do the talking.</h5>
-                    <Button variant="light" as={ Link } to="/products" className="px-5 py-3 themeColor">Shop now</Button>
+                    <Button variant="secondary" as={ Link } to="/products" className="px-5 py-3">{user.isAdmin ? "Admin Dashboard" : "Shop now"}</Button>
                 </Col>
             </Row>
         </Fade>
@@ -31,7 +33,7 @@ export default function Banner () {
                 <Image fluid width="200px" className="mb-4" rounded src={largeLogo}/>
                     <h1 className="d-none">g.b. music</h1>
                     <h5 className="mb-4">Let your fingers do the talking.</h5>
-                    <Button variant="light" as={ Link } to="/products" className="px-5 py-3 themeColor">Shop now</Button>
+                    <Button variant="light" as={ Link } to="/products" className="px-5 py-3 themeColor">{user.isAdmin ? "Admin Dashboard" : "Shop now"}</Button>
                 </Col>
             </Row>
         </Fade>

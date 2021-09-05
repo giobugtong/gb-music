@@ -1,16 +1,53 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Row, Col, Button, InputGroup, FormControl, Container, Fade } from "react-bootstrap"
+import { Row, Col, Button, InputGroup, FormControl, Container, Fade, Image } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
+import defaultPhoto from "../images/default-product-photo.jpeg"
+import sheeran from "../images/sheeran.jpg";
+import squier from "../images/squier.jpg";
+import malibu from "../images/malibu.jpg";
+import js328q from "../images/js328q.jpg";
+import clapton from "../images/clapton.jpg";
+import reverb from "../images/reverb.jpg";
+import as100d from "../images/as100d.jpg";
+import th30c from "../images/th30c.jpg";
+import telecaster from "../images/telecaster.jpg";
+import cd60ce from "../images/cd60ce.jpg";
+import camouflage from "../images/camouflage.jpg";
+import meshuggah from "../images/meshuggah.jpg";
+import capo from "../images/capo.jpg";
+import tweed from "../images/tweed.jpg";
+import beatles from "../images/beatles.jpg";
 
 export default function CartContents (props) {
     const { cartItemProp } = props;
-    const { productId, brandName, modelName, quantity, price } = cartItemProp;
+    const { productId, brandName, modelName, quantity, price, photo } = cartItemProp;
     const { user, userCart, setUserCart, fetchUserCart } = useContext(UserContext);
     const [itemQuantity, setItemQuantity] = useState(quantity);
     const [decreaseButton, setDecreaseButton] = useState(true);
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+
+    const productPhoto = (photo) => {
+        switch (photo) {
+            case "sheeran": return sheeran;
+            case "squier": return squier;
+            case "malibu": return malibu;
+            case "js328q": return js328q;
+            case "clapton": return clapton;
+            case "reverb": return reverb;
+            case "as100d": return as100d;
+            case "th30c": return th30c;
+            case "telecaster": return telecaster;
+            case "cd60ce": return cd60ce;
+            case "camouflage": return camouflage;
+            case "meshuggah": return meshuggah;
+            case "capo": return capo;
+            case "tweed": return tweed;
+            case "beatles": return beatles;
+            default: return defaultPhoto;
+        }
+    }
 
     const removeFromCart = (id) => {
             Swal.fire({
@@ -64,8 +101,8 @@ export default function CartContents (props) {
         })
     }
 
-    const updateQuantity = async () => {
-        await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/update-cart`, {
+    const updateQuantity = () => {
+        fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/update-cart`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +124,6 @@ export default function CartContents (props) {
                 })
             }
         })
-        .then(fetchUserCart())
     }
     
     useEffect(() => {
@@ -113,7 +149,8 @@ export default function CartContents (props) {
         <Container>
          <hr></hr>
             <Row className="my-4 my-md-3 py-2 p-md-3">
-                <Col md={6} className="my-2 my-md-auto text-center text-md-left"> <Link className="text-dark" to={`/products/${productId}`} ><h5>{brandName} {modelName}</h5></Link></Col>
+                <Col md={2} className="my-2 my-md-auto text-center text-md-left"> <Image src={productPhoto(photo)} fluid width="80px"/></Col>
+                <Col md={4} className="my-2 my-md-auto text-center text-md-left"> <Link className="text-dark" to={`/products/${productId}`} ><h5>{brandName} {modelName}</h5></Link></Col>
                 <Col md={2} className="mb-2 my-md-auto text-center"><Link to="/my-cart" className="text-info" onClick={() => removeFromCart(productId)} >Remove</Link></Col>
                 <Col md={2} className="mb-2 m-md-auto">
                 <InputGroup className="quantity m-auto">

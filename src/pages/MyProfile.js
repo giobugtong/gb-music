@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, Container, Row, Col, Fade } from "react-bootstrap";
+import { Card, Container, Row, Col, Fade, Image } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import UserContext from "../UserContext";
-import Order from "../components/Order"
+import adminCrown from "../icons/admin-crown.png";
 import MyOrders from "../components/MyOrders";
+import UserOrders from "../components/UserOrders";
 
 export default function MyProfile () {
     const { user, changeDocTitle, cartCount } = useContext(UserContext);
@@ -45,6 +46,7 @@ export default function MyProfile () {
     }, []);
 
     useEffect(() => {
+        user.isAdmin ? changeDocTitle(`Admin ${user.firstName}'s Profile`) :
         changeDocTitle(cartCount > 0 ? `My Profile (${cartCount})` : `My Profile`)
     }, [cartCount])
 
@@ -53,9 +55,12 @@ export default function MyProfile () {
         <Container className="my-3 my-md-5">
             <h2>My Profile</h2>
             <Row>
-                <Col xs={12}>
+                <Col md={6} lg={5} xl={4}>
                     <Card className="mt-3 mt-md-4">
-                        <Card.Header><h3>{firstName} {lastName}</h3></Card.Header>
+                        <Card.Header className={user.isAdmin ? "pb-0" : null}>
+                            {user.isAdmin && <Image className="d-inline-block mr-3 mb-3" fluid src={adminCrown} width="45px"/>}
+                            <h3 className="d-inline-block m-0">{firstName} {lastName}</h3>
+                        </Card.Header>
                         <Card.Body>
                             <p>Email address: {user.email}</p>
                             <p>Join date: {joinDate}</p>
@@ -66,12 +71,18 @@ export default function MyProfile () {
                     </Card>
                 </Col>
                 <Col xs={12}>
-                    <Card className="mt-3 mt-md-4 border-0">
-                         <h4 className="mt-3 mt-md-4">My Orders ({orders.length})</h4>
+                    <Card id="orders" className="mt-3 mt-md-4 border-0">
+                         <h4  className="mt-3 mt-md-4">{user.isAdmin ? "All Users' Orders" : "My Orders"} {orders.length ? `(${orders.length})` : null}</h4>
                         <hr></hr>
-                        {/* <Card.Body> */}
-                            <MyOrders props={orders}/>
-                        {/* </Card.Body> */}
+                            {user.isAdmin ? <UserOrders /> : <MyOrders props={orders}/> }
+                            <p className="ml-2 ml-md-4">
+                            {
+                                orders.length || user.isAdmin ? null :
+                                <>
+                                    <span>No orders yet. </span><Link className="text-info" to="/products">Add to cart now!</Link>
+                                </>
+                                 }
+                            </p>
                     </Card>
                 </Col>
             </Row>

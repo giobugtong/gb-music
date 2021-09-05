@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext} from "react";
 import UserContext from "../UserContext";
 import { Table, Button, Modal, Form, InputGroup, FormControl } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 export default function AdminView (props) {
     const { productData, fetchData } = props;
@@ -12,7 +13,6 @@ export default function AdminView (props) {
     const [modelName, setModelName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(null);
-    const [productSpecs, setProductSpecs] = useState({});
     const [material, setMaterial] = useState("");
     const [color, setColor] = useState("");
     const [size, setSize] = useState("");
@@ -40,7 +40,6 @@ export default function AdminView (props) {
         setType("");
         setCategory("");
         setWeight(null);
-        setProductSpecs({});
     }
 
     const openEdit = (product) => {
@@ -49,30 +48,18 @@ export default function AdminView (props) {
         setModelName(product.modelName);
         setDescription(product.description);
         setPrice(product.price);
-        setMaterial(product.productSpecs.material);
-        setColor(product.productSpecs.color);
-        setSize(product.productSpecs.size);
-        setType(product.productSpecs.type);
-        setCategory(product.productSpecs.category);
-        setWeight(product.productSpecs.weight);
-        setProductSpecs(product.ProductSpecs);
+        setMaterial(product.material);
+        setColor(product.color);
+        setSize(product.size);
+        setType(product.type);
+        setCategory(product.category);
+        setWeight(product.weight);
         setShowEdit(true);
     }
     const closeEdit = () => {
         setShowEdit(false);
         clearForm();
     }
-
-    useEffect( () => {
-        setProductSpecs({
-            material: material,
-            color: color,
-            size: size,
-            type: type,
-            category: category,
-            weight: weight
-        })
-    }, [material, color, size, type, category, weight])
 
     useEffect(() => {
         const productsArray = productData.map(product => {
@@ -83,12 +70,20 @@ export default function AdminView (props) {
                     <td>{product.modelName}</td>
                     <td>{product.description}</td>
                     <td>&#8369;{`${product.price.toLocaleString()}.00`}</td>
-                    <td className={product.isActive ? "text-success" : "text-danger"}>{product.isActive ? "Available" : "Unavailable"}</td>
-                    <td className="d-flex justify-content-center">
-                        <Button className="m-2" variant="warning" size="sm" onClick={() => openEdit(product)}>Update</Button>
+                    <td>
+                    <div>Type: {product.type}</div>
+                    <div>Category: {product.category}</div>
+                    <div>Material: {product.material}</div>
+                    <div>Color: {product.color}</div>
+                    <div>Weight (grams): {product.weight}</div>
+                    <div>Size: {product.size}</div>
+                    </td>
+                    <td className={product.isActive ? "text-success text-center" : "text-danger text-center"}>{product.isActive ? "Available" : "Unavailable"}</td>
+                    <td className="text-center">
+                        <Button className="btn-block" variant="warning" size="sm" onClick={() => openEdit(product)}>Update</Button>
                         {
-                            product.isActive ? <Button className="m-2" variant="danger" size="sm" onClick={() => archiveToggle(product._id, product.isActive)}>Disable</Button>
-                            : <Button className="m-2" variant="success" size="sm" onClick={() => archiveToggle(product._id, product.isActive)}>Enable</Button>
+                            product.isActive ? <Button className="btn-block" variant="danger" size="sm" onClick={() => archiveToggle(product._id, product.isActive)}>Disable</Button>
+                            : <Button className="btn-block" variant="success" size="sm" onClick={() => archiveToggle(product._id, product.isActive)}>Enable</Button>
                         }
                         
                     </td>
@@ -116,13 +111,26 @@ export default function AdminView (props) {
                 modelName: modelName,
                 description: description,
                 price: price,
-                productSpecs: productSpecs
+                    material: material,
+                    color: color,
+                    size: size,
+                    type: type,
+                    category: category,
+                    weight: weight
             })
         })
         .then(res => res.json())
         .then(data => {
-            if(data) {
+            if(data.incompleteDetails) {
 
+
+                Swal.fire({
+                    title: "Oops!",
+                    icon: "error",
+                    text: "Please enter all required details!",
+                    timer: 5000
+                })
+            } else {
                 fetchData()
 
                 Swal.fire({
@@ -132,13 +140,6 @@ export default function AdminView (props) {
                     timer: 5000
                 })
                 closeAdd();
-            } else {
-                Swal.fire({
-                    title: "Error!",
-                    icon: "error",
-                    text: "Something went wrong. :(",
-                    timer: 5000
-                })
             }
         })
         .catch((err)=>Swal.fire({title:"error", icon: "error", text: `ERROR MSG: ${err}.`}))
@@ -168,19 +169,30 @@ export default function AdminView (props) {
                         modelName: modelName,
                         description: description,
                         price: price,
-                        productSpecs: {productSpecs}
+                            material: material,
+                            color: color,
+                            size: size,
+                            type: type,
+                            category: category,
+                            weight: weight
                     })
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
                         fetchData();
-                        Swal.fire({
-                            title: "Success!",
-                            icon: "success",
-                            text: `You have successfully updated the product details for ${data.name}!`,
-                            timer: 5000
-                        });
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            icon: "info",
+                            position: "top",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showCloseButton: true
+                          })
+                        Toast.fire({
+                            text: `You have successfully updated the product details for ${data.brandName} ${data.modelName}!`
+                        })
                         closeEdit();
                     } else {
                         fetchData();
@@ -211,17 +223,31 @@ export default function AdminView (props) {
         .then(data => {
             if (data.isProductActive) {
                 fetchData();
-                Swal.fire({
-                    title: "Success",
+                const Toast = Swal.mixin({
+                    toast: true,
                     icon: "success",
-                    text: "Product successfully actived!"
+                    position: "top",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCloseButton: true
+                  })
+                Toast.fire({
+                    text: "Product is now active."
                 })
             } else if (!data.isProductActive) {
                 fetchData();
-                Swal.fire({
-                    title: "Success",
+                const Toast = Swal.mixin({
+                    toast: true,
                     icon: "success",
-                    text: "Product successfully deactivated!"
+                    position: "top",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCloseButton: true
+                  })
+                Toast.fire({
+                    text: "Product is now inactive."
                 })
             } else {
                 fetchData();
@@ -251,6 +277,9 @@ export default function AdminView (props) {
             </div>
             <div className="d-flex justify-content-center mb-4">
                 <Button variant="dark" className="themeColor" onClick={openAdd}>Add New Product</Button>
+            </div>
+            <div className="text-right mb-3">
+                <Link className="text-info text-right" to={"/profile"}>View User Orders</Link>
             </div>
             <Table striped bordered hover responsive>
                 <thead>

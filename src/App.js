@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import './App.css';
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 import AppNavbar from './components/AppNavbar';
@@ -15,12 +15,14 @@ import NotFound from "./pages/NotFound";
 import SpecificProuct from './pages/SpecificProduct';
 import MyProfile from './pages/MyProfile';
 import MyCart from './pages/MyCart';
+import FilteredProducts from './pages/FilteredProducts';
 
 export default function App() {
 
   const [cartCount, setCartCount] = useState(0);
   const [user, setUser] = useState({
     id: localStorage.getItem("id"),
+    firstName: localStorage.getItem("firstName"),
     email: localStorage.getItem("email"),
     accessToken: localStorage.getItem("accessToken"),
     isAdmin: localStorage.getItem("isAdmin") === "true",
@@ -34,6 +36,7 @@ export default function App() {
     localStorage.clear();
     setUser({
       id: null,
+      firstName: null,
       email: null,
       accessToken: null,
       isAdmin: null,
@@ -57,7 +60,6 @@ export default function App() {
     await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
     .then(res => res.json())
     .then(data => {
-        console.log(data)
         setUserCart(data);
         console.log("userCart FETCHED with " + data.length + " item/s")
     })
@@ -91,6 +93,10 @@ export default function App() {
 
               <Route exact path="/" component={ Home } />
               <Route exact path="/products" component={ ProductCatalog } />
+
+              <Route exact path="/some-products/:filter">
+                {user.isAdmin ? <Redirect to="/products"/> : <FilteredProducts/> }
+              </Route>
 
               <Route exact path="/profile">
                 {!user.email ? <Redirect to="/login" /> : <MyProfile />}

@@ -31,6 +31,7 @@ export default function Login () {
         .then(data => {
             if(data.accessToken) {
                 localStorage.setItem("id", data.foundUser._id);
+                localStorage.setItem("firstName", data.foundUser.firstName);
                 localStorage.setItem("email", email);
                 localStorage.setItem("accessToken", data.accessToken);
                 localStorage.setItem("isAdmin", data.foundUser.isAdmin);
@@ -38,19 +39,12 @@ export default function Login () {
                 setUser({
                     email: email,
                     id: data.foundUser._id,
+                    firstName: data.foundUser.firstName,
                     accessToken: data.accessToken,
                     previousProduct: localStorage.previousProduct,
                     isAdmin: data.foundUser.isAdmin,
                     userCart: data.foundUser.userCart
                 });
-                // Swal.fire({
-                    //     title: "Log in success!",
-                    //     icon: "success",
-                    //     text: `Welcome, ${data.foundUser.firstName}! Add to cart now!`,
-                    //     timer: 5000,
-                    //     confirmButtonText: "Let's go!"
-                    // })
-                    
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top',

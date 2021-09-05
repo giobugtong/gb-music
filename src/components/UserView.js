@@ -12,7 +12,7 @@ export default function UserView ({productData}) {
             if (product.isActive) {
                 return(
                     <Col className="my-2 my-md-3 mx-auto" sm={10} md={8} lg={6} xl={4}>
-                    <Product key={product._id} productProp={product} />
+                        <Product key={product._id} productProp={product} />
                     </Col>
                 )
             } else {
@@ -28,10 +28,12 @@ export default function UserView ({productData}) {
 
     return(
         <>
-            <h1 className="ml-2 ml-md-3 mt-3 mt-md-5">All Products</h1>
+        <Col className="mx-auto" lg={11} xl={10}>
+            <h1 className="ml-2 ml-md-3 mt-3 mt-md-5">Products</h1>
             <Row className="my-2 my-md-3">
                 {products}
             </Row>
+        </Col>
         </>
     )
 }
