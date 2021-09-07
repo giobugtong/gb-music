@@ -50,31 +50,29 @@ export default function Product ({productProp}) {
     
     return(
         <Fade in={show}>
-            <Card className="cardHighlight m-2">
-                <Card.Body>
-                        <Card.Title className="mb-lg-4 text-center text-md-left">
-                            <h3>{brandName}</h3>
-                            <Link className="text-dark" to={`/products/${_id}`}>
-                            <h5>{modelName}</h5>
-                            </Link>
-                        </Card.Title>
-                        <Link to={`/products/${_id}`}>
-                            <Image src={productPhoto(photo)} width="400" rounded className="mt-2 mb-3 mb-md-4 mx-auto d-block" fluid />
-                        </Link>
-                    
-                    <Card.Text>
-                        {description}
-                    </Card.Text>
-                    <Card.Text>
-                        <p className="my-0">
-                        <strong>&#8369;{price.toLocaleString()+".00"}</strong>
-                        </p>
-                    </Card.Text>
-                </Card.Body>
-                <Card.Footer>
-                    <Link className="text-dark" to={`/products/${_id}`}>See more details</Link>
-                </Card.Footer>
-            </Card>
+            <Link className="text-dark" style={{textDecoration: "none"}} to={`/products/${_id}`}>
+                <Card className="cardHighlight">
+                    <Card.Body>
+                            <Card.Title className="mb-lg-4 text-center text-md-left">
+                                <h3>{brandName}</h3>
+                                {/* <Link className="text-dark" to={`/products/${_id}`}> */}
+                                <h5>{modelName}</h5>
+                                {/* </Link> */}
+                            </Card.Title>
+                                <Image src={productPhoto(photo)} width="400" rounded className="mt-2 mb-3 mb-md-4 mx-auto d-block" fluid />
+                        
+                    </Card.Body>
+                        <Card.Text className="mx-3">
+                            {description}
+                            <p className="mt-2">
+                            <strong>&#8369;{price.toLocaleString()+".00"}</strong>
+                            </p>
+                        </Card.Text>
+                    {/* <Card.Footer>
+                        <Link className="text-dark" to={`/products/${_id}`}>See more details</Link>
+                    </Card.Footer> */}
+                </Card>
+            </Link>
         </Fade>
     );
 }

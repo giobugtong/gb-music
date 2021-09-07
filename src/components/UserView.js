@@ -11,7 +11,7 @@ export default function UserView ({productData}) {
         const productsArray = productData.map(product => {
             if (product.isActive) {
                 return(
-                    <Col className="my-2 my-md-3 mx-auto" sm={10} md={8} lg={6} xl={4}>
+                    <Col className="my-2 my-md-3" sm={10} md={8} lg={6} xl={4}>
                         <Product key={product._id} productProp={product} />
                     </Col>
                 )

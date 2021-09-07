@@ -8,7 +8,6 @@ html {
 
 #navbar {
   position: sticky;
-  /* min-height: 4vh; */
   top: 0;
   z-index: 4;
   background-color: rgba(0, 0, 0, 1) !important;
