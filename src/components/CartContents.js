@@ -25,7 +25,8 @@ export default function CartContents (props) {
     const { productId, brandName, modelName, quantity, price, photo } = cartItemProp;
     const { user, userCart, setUserCart, fetchUserCart } = useContext(UserContext);
     const [itemQuantity, setItemQuantity] = useState(quantity);
-    const [decreaseButton, setDecreaseButton] = useState(true);
+    const [disableDecrement, setDisableDecrement] = useState(true);
+    const [disableIncrement, setDisableIncrement] = useState(false);
     const [show, setShow] = useState(false);
 
     const productPhoto = (photo) => {
@@ -101,7 +102,7 @@ export default function CartContents (props) {
         })
     }
 
-    const updateQuantity = () => {
+    const updateQuantity = (qty) => {
         fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/update-cart`, {
             method: "PUT",
             headers: {
@@ -110,7 +111,7 @@ export default function CartContents (props) {
             },
             body: JSON.stringify({
                 productId: productId,
-                quantity: itemQuantity
+                quantity: qty
             })
         })
         .then(response => response.json())
@@ -128,16 +129,24 @@ export default function CartContents (props) {
     
     useEffect(() => {
         if (itemQuantity > 1) {
-            setDecreaseButton(false);
-        } else if (itemQuantity >= 100) {
-            setItemQuantity(1);
-            console.log("TOO MUCH!")
+            if (itemQuantity >= 20) {
+                setDisableIncrement(true);
+                setDisableDecrement(false);
+                setItemQuantity(20);
+                updateQuantity(20);
+
+            } else {
+                setDisableIncrement(false);
+                setDisableDecrement(false);
+                updateQuantity(itemQuantity);
+            }
         } else {
-            setDecreaseButton(true);
+            setDisableDecrement(true);
+            setDisableIncrement(false)
             setItemQuantity(1);
+            updateQuantity(1);
         }
-        updateQuantity()
-    }, [itemQuantity, decreaseButton])
+    }, [itemQuantity, disableDecrement, disableIncrement])
     
     
     useEffect(() => {
@@ -155,13 +164,13 @@ export default function CartContents (props) {
                 <Col md={2} className="mb-2 m-md-auto">
                 <InputGroup className="quantity m-auto">
                 <InputGroup.Prepend>
-                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity - 1)} disabled={decreaseButton}>-</Button>
+                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity - 1)} disabled={disableDecrement}>-</Button>
                 </InputGroup.Prepend>
 
                 <FormControl appearance="none" className="text-center" type="number" value={itemQuantity} onChange={e => setItemQuantity(parseInt(e.target.value))} ></FormControl>
 
                 <InputGroup.Append>
-                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity + 1)}>+</Button>
+                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity + 1)} disabled={disableIncrement}>+</Button>
                 </InputGroup.Append>
                 </InputGroup>
                 </Col>

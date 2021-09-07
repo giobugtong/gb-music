@@ -35,7 +35,8 @@ export default function SpecificProduct () {
     const [category, setCategory] = useState("");
     const [weight, setWeight] = useState(null);
 
-    const [decreaseButton, setDecreaseButton] = useState(true);
+    const [disableDecrement, setDisableDecrement] = useState(true);
+    const [disableIncrement, setDisableIncrement] = useState(false);
     const { productId } = useParams();
     const { user, setUser, fetchUserCart, cartCount, changeDocTitle } = useContext(UserContext);
     const history = useHistory();
@@ -81,7 +82,21 @@ export default function SpecificProduct () {
         })
         .then(res => res.json())
         .then(data => {
-            if (data) {
+            if (data.tooMuchItems) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCloseButton: true
+                });
+                Toast.fire({
+                    icon: "warning",
+                    title: 'Maximum of 20 items per order ONLY.'
+                });
+            } else if (data) {
                 Swal.fire({
                     title: `Item/s added to cart!`,
                     icon: "success",
@@ -112,12 +127,18 @@ export default function SpecificProduct () {
     
     useEffect(() => {
         if (quantity > 1) {
-            setDecreaseButton(false);
+            setDisableDecrement(false);
+            if (quantity >= 20) {
+                setDisableIncrement(true);
+                setQuantity(20);
+            } else {
+                setDisableIncrement(false);
+            }
         } else {
-            setDecreaseButton(true);
+            setDisableDecrement(true);
             setQuantity(1);
         }
-    }, [quantity, decreaseButton])
+    }, [quantity, disableDecrement, disableIncrement])
     
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
@@ -201,13 +222,13 @@ export default function SpecificProduct () {
                     (user.accessToken) && 
                     <InputGroup className="quantity mx-auto mx-md-0 mt-4">
                         <InputGroup.Prepend>
-                            <Button onClick={() => setQuantity(quantity - 1)} disabled={decreaseButton} variant="warning">-</Button>
+                            <Button onClick={() => setQuantity(quantity - 1)} disabled={disableDecrement} variant="warning">-</Button>
                         </InputGroup.Prepend>
 
                         <FormControl appearance="none" className="text-center" type="number" value={quantity} onChange={e => setQuantity(parseInt(e.target.value))} ></FormControl>
 
                         <InputGroup.Append>
-                            <Button onClick={() => setQuantity(quantity + 1)} variant="warning">+</Button>
+                            <Button onClick={() => setQuantity(quantity + 1)} disabled={disableIncrement} variant="warning">+</Button>
                         </InputGroup.Append>
                     </InputGroup>
                     

@@ -11,7 +11,7 @@ export default function MyCart ()  {
     const { user, userCart, fetchUserCart, changeDocTitle, cartCount } = useContext(UserContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [discountCode, setDiscountCode] = useState("");
-    const [discountError, setDiscountError] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const [errorStyle, setErrorStyle] = useState("");
 
     const sumAmount = () => {
@@ -22,15 +22,15 @@ export default function MyCart ()  {
                 return initial + current;
             })
             setTotalAmount(total)
-        } else {
-            setTotalAmount(0)
         }
     }
     
     const checkout = () => {
-        if (discountCode === "FULLSTACK30" || discountCode === "BACKEND20" || discountCode === "FRONTEND15" || discountCode === "") {
-            setDiscountError("")
-            setErrorStyle("")
+        if (!userCart) {
+            setErrorMessage("There are no items in your cart!");
+        } else if (discountCode === "FULLSTACK30" || discountCode === "BACKEND20" || discountCode === "FRONTEND15" || discountCode === "") {
+            setErrorMessage("");
+            setErrorStyle("");
             fetch(`${process.env.REACT_APP_API_URL}/orders/checkout`, {
                 method: "POST",
                 headers: {
@@ -64,7 +64,7 @@ export default function MyCart ()  {
                 }
             })
         } else {
-            setDiscountError("Invalid Voucher Code");
+            setErrorMessage("Invalid Voucher Code");
             setErrorStyle("border-danger");
         }
 
@@ -153,7 +153,7 @@ export default function MyCart ()  {
             </Row>
             <Row className="justify-content-end mt-2">
                 <Col md={4} lg={3} className="text-right">
-                <div className="text-danger mb-3">{discountError}</div>
+                <div className="text-danger mb-3">{errorMessage}</div>
                     <FormGroup>
                         <FormControl className={errorStyle} value={discountCode} onChange={e => setDiscountCode(e.target.value)} type="text" placeholder="Enter Voucher Code"></FormControl>
                     </FormGroup>
