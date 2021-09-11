@@ -3,7 +3,6 @@ import { Button, Fade, Image, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import largeLogo from "../images/gb-music-logo-lg.png"
 import UserContext from "../UserContext";
-import Highlights from "./Highlights";
 
 
 export default function Banner () {

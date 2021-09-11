@@ -136,20 +136,22 @@ export default function MyCart ()  {
     (   <>
         <Container>
             <Row className="text-center d-none d-md-flex">
-                <Col md={8} className="text-left"><h4>Product</h4></Col>
-                <Col md={2}><h4></h4></Col>
-                <Col md={2}><h4>Subtotal</h4></Col>
+                <Col md={8} className="text-left"><h5>Product</h5></Col>
+                <Col md={2}><h5>Quantity</h5></Col>
+                <Col md={2}><h5>Subtotal</h5></Col>
             </Row>
         </Container>
            {/* <UserCart userCart={userCart}/> */}
            <UserCart />
            
             <hr></hr>
-        <Link className="text-danger d-block text-right" to="#" onClick={()=> removeAllCartItems()} >Remove all</Link>
+        <Col xs={12} className="pb-3">
+            <Link className="text-danger float-right" to="#" onClick={()=> removeAllCartItems()} >Remove all</Link>
+        </Col>
         <Container>
             <Row className="justify-content-end text-right text-md-center mt-4 mt-md-5">
-                <Col md={2}><h3>Total</h3></Col>
-                <Col md={2}><h5 className="mt-1 font-weight-bold">P{totalAmount.toLocaleString()}.00</h5></Col>
+                <Col md={2}><h4>Total</h4></Col>
+                <Col md={2}><h5 className="mt-1">P{totalAmount.toLocaleString()}.00</h5></Col>
             </Row>
             <Row className="justify-content-end mt-2">
                 <Col md={4} lg={3} className="text-right">
@@ -159,7 +161,7 @@ export default function MyCart ()  {
                     </FormGroup>
                 </Col>
                 <Col md={12} onClick={()=> checkout()} className="d-md-none mt-2 mb-5 mx-auto"><Button className="themeColor py-2 btn-block font-weight-bold">Checkout</Button></Col>
-                <Col md={12} onClick={()=> checkout()} className="d-none d-md-block mt-2 mb-4 mx-auto"><Button className="themeColor float-right py-2 px-5 font-weight-bold">Checkout</Button></Col>
+                <Col md={12} className="d-none d-md-block mt-2 mb-4 mx-auto"><Button onClick={()=> checkout()} className="themeColor py-2 px-5 font-weight-bold float-right">Checkout</Button></Col>
             </Row>
         </Container>
         </>

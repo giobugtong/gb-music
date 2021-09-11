@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Row, Col, Button, InputGroup, FormControl, Container, Fade, Image } from "react-bootstrap"
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
 import defaultPhoto from "../images/default-product-photo.jpeg"
@@ -23,7 +23,7 @@ import beatles from "../images/beatles.jpg";
 export default function CartContents (props) {
     const { cartItemProp } = props;
     const { productId, brandName, modelName, quantity, price, photo } = cartItemProp;
-    const { user, userCart, setUserCart, fetchUserCart } = useContext(UserContext);
+    const { user, userCart, fetchUserCart } = useContext(UserContext);
     const [itemQuantity, setItemQuantity] = useState(quantity);
     const [disableDecrement, setDisableDecrement] = useState(true);
     const [disableIncrement, setDisableIncrement] = useState(false);
@@ -155,28 +155,28 @@ export default function CartContents (props) {
 
     return(
         <Fade in={show}>
-        <Container>
-         <hr></hr>
-            <Row className="my-4 my-md-3 py-2 p-md-3">
-                <Col md={2} className="my-2 my-md-auto text-center text-md-left"> <Image src={productPhoto(photo)} fluid width="80px"/></Col>
-                <Col md={4} className="my-2 my-md-auto text-center text-md-left"> <Link className="text-dark" to={`/products/${productId}`} ><h5>{brandName} {modelName}</h5></Link></Col>
-                <Col md={2} className="mb-2 my-md-auto text-center"><Link to="/my-cart" className="text-info" onClick={() => removeFromCart(productId)} >Remove</Link></Col>
-                <Col md={2} className="mb-2 m-md-auto">
-                <InputGroup className="quantity m-auto">
-                <InputGroup.Prepend>
-                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity - 1)} disabled={disableDecrement}>-</Button>
-                </InputGroup.Prepend>
+            <Container>
+            <hr></hr>
+                <Row>
+                    <Col md={2} className="my-2 my-md-auto text-center text-md-left"> <Image src={productPhoto(photo)} fluid width="80px"/></Col>
+                    <Col md={4} className="my-2 my-md-auto text-center text-md-left"> <Link className="text-dark font-weight-bold" to={`/products/${productId}`} >{brandName} {modelName}</Link></Col>
+                    <Col xs={6} md={2} className="mb-2 my-md-auto text-center"><Link to="/my-cart" className="text-info" onClick={() => removeFromCart(productId)}>Remove</Link></Col>
+                    <Col xs={6} md={2} className="mb-2 m-md-auto">
+                    <InputGroup className="quantity m-auto">
+                    <InputGroup.Prepend>
+                        <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity - 1)} disabled={disableDecrement}>-</Button>
+                    </InputGroup.Prepend>
 
-                <FormControl appearance="none" className="text-center" type="number" value={itemQuantity} onChange={e => setItemQuantity(parseInt(e.target.value))} ></FormControl>
+                    <FormControl appearance="none" className="text-center" type="number" value={itemQuantity} onChange={e => setItemQuantity(parseInt(e.target.value))} ></FormControl>
 
-                <InputGroup.Append>
-                    <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity + 1)} disabled={disableIncrement}>+</Button>
-                </InputGroup.Append>
-                </InputGroup>
-                </Col>
-                <Col md={2} className="my-2 my-md-auto text-center" ><span className="d-md-none font-weight-bold">Subtotal: </span>&#8369;{(price * itemQuantity).toLocaleString()}.00</Col>
-            </Row>
-        </Container>
+                    <InputGroup.Append>
+                        <Button size="sm" variant="dark" className="themeColor" onClick={() => setItemQuantity(itemQuantity + 1)} disabled={disableIncrement}>+</Button>
+                    </InputGroup.Append>
+                    </InputGroup>
+                    </Col>
+                    <Col md={2} className="my-2 my-md-auto text-center" ><span className="d-md-none font-weight-bold">Subtotal: </span>&#8369;{(price * itemQuantity).toLocaleString()}.00</Col>
+                </Row>
+            </Container>
         </Fade>
     )
 }

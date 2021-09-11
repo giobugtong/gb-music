@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import './App.css';
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Redirect, Route, Switch, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Link, Redirect, Route, Switch } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 import AppNavbar from './components/AppNavbar';
@@ -54,7 +54,7 @@ export default function App() {
         })
         setCartCount(count);
     } else setCartCount(0);
-}, [userCart, window])
+}, [userCart])
 
   const fetchUserCart = async () => {
     await fetch(`${process.env.REACT_APP_API_URL}/users/${user.id}/my-cart`)
@@ -92,6 +92,7 @@ export default function App() {
             <Switch>
 
               <Route exact path="/" component={ Home } />
+              <Route exact path="/rick-roll" component={() => {console.log("Rick Rolled!"); window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; return null}} />
               <Route exact path="/products" component={ ProductCatalog } />
               {/* <Route exact path="/some-products/:filter" component={ FilteredProducts } /> */}
               <Route exact path="/some-products/:filter">

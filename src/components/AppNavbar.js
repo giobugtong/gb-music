@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, OverlayTrigger, Tooltip, Badge, Image } from "react-bootstrap";
 import UserContext from "../UserContext";
@@ -9,7 +9,6 @@ import profileIcon from "../icons/white-profile.png";
 import logoutIcon from "../icons/white-logout.png";
 
 export default function AppNavbar () {
-    const history = useHistory();
     const { user, unsetUser, fetchUserCart, cartCount } = useContext(UserContext);
 
     const logout = () => {

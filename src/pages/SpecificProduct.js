@@ -89,8 +89,7 @@ export default function SpecificProduct () {
                     showConfirmButton: false,
                     showCloseButton: true,
                     timer: 3000,
-                    timerProgressBar: true,
-                    showCloseButton: true
+                    timerProgressBar: true
                 });
                 Toast.fire({
                     icon: "warning",
