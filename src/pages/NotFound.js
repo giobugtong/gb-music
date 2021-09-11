@@ -9,7 +9,7 @@ export default function NotFound () {
                 <Jumbotron className="text-center mt-5 bg-white">
                     <h1 className="text-danger" id="four-zero-four">404</h1>
                     <p className="mb-4">Page not found!</p>
-                    <Link to="/" className="mx-auto px-4" variant="primary">Back to Homepage</Link>
+                    <Link to="/" className="mx-auto px-4 text-info" >Back to Homepage</Link>
                 </Jumbotron>
             </Container>
         </Fragment>
